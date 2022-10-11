@@ -35,13 +35,13 @@ router.post("/signup", async (req, res) =>{
 router.post("/login", async (req, res) =>{
     const { nickname, password } = req.body;
     try {
-        const user = await Users.findOne({ nickname });
+        const user = await Users.findOne({ where: { nickname }});
 
         if(!user || password !== user.password) {
             res.status(400).json({ errorMessage: "닉네임 또는 패스워드를 확인해주세요." });
             return;
         }
-        // res.send("ok");
+        
         res.send({
             token: jwt.sign({ nickname: user.nickname}, "tunamayo-secret-key"),
         });

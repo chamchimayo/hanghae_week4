@@ -3,7 +3,6 @@ const app = express();
 const PORT = 3000;
 const router = require('./routes/index');
 const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
 
 mongoose.connect('mongodb://localhost:27017/hanghae_week4');
 

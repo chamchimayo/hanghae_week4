@@ -1,5 +1,6 @@
 const express= require('express');
 const router = express.Router();
+const jwt = require("jsonwebtoken");
 const Users = require('../models/users');
 
 // 회원 가입 API
@@ -37,7 +38,10 @@ router.post("/login", async (req, res) =>{
             res.status(400).json({ errorMessage: "닉네임 또는 패스워드를 확인해주세요." });
             return;
         }
-        res.send("로그인 OK!");
+        // res.send("ok");
+        res.send({
+            token: jwt.sign({ nickname: user.nickname}, "tunamayo-secret-key"),
+        });
     } catch(e) {
         res.status(400).json({ errorMessage: "로그인에 실패했습니다." });
     }

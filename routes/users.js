@@ -1,7 +1,10 @@
 const express= require('express');
 const router = express.Router();
+// const Joi = require("joi");
 const jwt = require("jsonwebtoken");
-const Users = require('../models/users');
+
+const { Op } = require("sequelize");
+const { Users } = require('../models');
 
 // 회원 가입 API
 router.post("/signup", async (req, res) =>{
@@ -15,15 +18,15 @@ router.post("/signup", async (req, res) =>{
     }
 
     try {
-        const existsUser = await Users.findOne({ nickname });
-        
+        console.log("here comes!")
+        const existsUser = await Users.findOne({ where: { nickname }});
+        console.log(existsUser);
         if(existsUser) {
             res.status(400).json({ errorMessage: "중복된 닉네임입니다." });
             return;
         }
-
         await Users.create({ nickname, password });
-        res.status(201).send({});
+        res.status(201).json({ message: "회원 가입 완료!" });
     } catch(e) {
         res.status(400).json({ errorMessage: "회원 가입에 실패했습니다." });
     }

@@ -1,20 +1,11 @@
-"use strict";
-const { Model } = require("sequelize");
+'use strict';
 
-module.exports = (sequelize, DataTypes) => {
-  class Users extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  }
+const { DataTypes } = require('sequelize');
 
-  Users.init(
-    {
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('Users', {
       userId: {
         allowNull: false,
         autoIncrement: true,
@@ -39,12 +30,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
-      },
-    },
-    {
-      sequelize,
-      modelName: "Users",
-    }
-  );
-  return Users;
+      }
+    });
+  },
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('Users');
+  }
 };

@@ -2,9 +2,6 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 const router = require('./routes/index');
-const mongoose = require('mongoose');
-
-mongoose.connect('mongodb://localhost:27017/hanghae_week4');
 
 app.use(express.json());
 app.use("/", router);

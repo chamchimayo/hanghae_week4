@@ -17,15 +17,29 @@ router.post("/signup", async (req, res) =>{
         const existsUser = await Users.findOne({ nickname });
         
         if(existsUser) {
-            res.status(400).json({ errorMessage: "닉네임이 이미 사용중입니다." });
+            res.status(400).json({ errorMessage: "중복된 닉네임입니다." });
             return;
         }
 
-        const createdUser = await Users.create({ nickname, password });
-        console.log(createdUser);
+        await Users.create({ nickname, password });
         res.status(201).send({});
     } catch(e) {
         res.status(400).json({ errorMessage: "회원 가입에 실패했습니다." });
+    }
+});
+
+router.post("/login", async (req, res) =>{
+    const { nickname, password } = req.body;
+    try {
+        const user = await Users.findOne({ nickname });
+
+        if(!user || password !== user.password) {
+            res.status(400).json({ errorMessage: "닉네임 또는 패스워드를 확인해주세요." });
+            return;
+        }
+        res.send("로그인 OK!");
+    } catch(e) {
+        res.status(400).json({ errorMessage: "로그인에 실패했습니다." });
     }
 });
 

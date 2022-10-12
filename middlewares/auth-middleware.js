@@ -14,11 +14,9 @@ module.exports = (req, res, next) => {
 
     try {
         const { userId } = jwt.verify(authToken, "my-secret-key");
-        console.log(jwt.verify(authToken, "my-secret-key"));
             
         Users.findByPk(userId).then((user) => {
             res.locals.user = user;
-            console.log(res.locals.user);
             next();
         });
     } catch(e) {

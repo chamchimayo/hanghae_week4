@@ -64,4 +64,22 @@ router.patch('/:commentId', authMiddleware, async (req, res) => {
     }
 });
 
+// 댓글 삭제 API
+router.delete("/:commentId", authMiddleware, async (req, res) => {
+    const { commentId } = req.params;
+
+    try {
+        const comment = await Comments.findByPk(commentId);
+        
+        if(comment) {
+            await Comments.destroy({ where: { commentId } });
+            res.status(200).json({ "message": "댓글을 삭제하였습니다." });
+        } else {
+            res.status(400).json({ errorMessage: "댓글이 존재하지 않습니다." });
+        }
+    } catch (err) {
+        res.status(400).json({ errorMessage: "댓글 삭제에 실패했습니다." });
+    }
+});
+
 module.exports = router;

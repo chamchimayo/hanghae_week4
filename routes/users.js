@@ -42,7 +42,8 @@ router.post("/login", async (req, res) =>{
         }
         
         res.send({
-            token: jwt.sign({ userId: user.userId }, "my-secret-key"),
+            token : jwt.sign({ userId: user.userId }, process.env.JWT_SECRET, {expiresIn: '1m'} )
+            // token: jwt.sign({ userId: user.userId }, "my-secret-key"),
         });
     } catch(e) {
         res.status(400).json({ errorMessage: "로그인에 실패했습니다." });

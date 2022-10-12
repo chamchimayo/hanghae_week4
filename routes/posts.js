@@ -21,16 +21,16 @@ router.post("/", authMiddleware, async (req, res) => {
 
 // 게시글 목록 조회 API
 router.get("/", async (req, res) => {
-    // try {
+    try {
         const data = await Posts.findAll({
             attributes: {exclude: ['content'],},
             order: [['createdAt', 'DESC']],
         });
         console.log(data);
         res.json({ data });
-    // } catch (err) {
-    //     res.status(400).json({ errorMessage: "게시글 목록 조회에 실패했습니다." });
-    // }
+    } catch (err) {
+        res.status(400).json({ errorMessage: "게시글 목록 조회에 실패했습니다." });
+    }
 });
 
 // 게시글 상세 조회 API
@@ -62,9 +62,9 @@ router.patch("/:postId", authMiddleware, async (req, res) => {
                 { title, content },
                 {where: { postId }},
             );
-            res.json({ "message": "게시글을 수정하였습니다." });
+            res.status(400).json({ "message": "게시글을 수정하였습니다." });
         } else {
-            res.json({ errorMessage: "게시글이 존재하지 않습니다." });
+            res.status(400).json({ errorMessage: "게시글이 존재하지 않습니다." });
         }
     } catch {
         return res.status(400).json({ errorMessage: "게시글 수정에 실패했습니다" });
@@ -79,9 +79,9 @@ router.delete("/:postId", authMiddleware, async (req, res) => {
     try {
         if(post) {
             await Posts.destroy({ where: { postId } });
-            res.json({ "message": "게시글을 삭제하였습니다." });
+            res.status(400).json({ "message": "게시글을 삭제하였습니다." });
         } else {
-            res.json({ errorMessage: "게시글 존재하지 않습니다." });
+            res.status(400).json({ errorMessage: "게시글 존재하지 않습니다." });
         }
     } catch (err) {
         res.json({ errorMessage: "게시글 삭제에 실패했습니다."});

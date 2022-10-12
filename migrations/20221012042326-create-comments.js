@@ -9,6 +9,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.DataTypes.INTEGER
       },
+      postId: {
+        allowNull: false,
+        type: Sequelize.DataTypes.INTEGER
+      },
       userId: {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,

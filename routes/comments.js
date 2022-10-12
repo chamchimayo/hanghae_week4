@@ -21,4 +21,25 @@ router.post("/:postId", authMiddleware, async (req, res) => {
     }
 });
 
+// 댓글 목록 조회 API
+router.get("/:postId", async (req, res) => {
+    const { postId } = req.params;
+
+    try {
+        // const post = await Posts.findByPk(postId);
+        const data = await Comments.findAll({
+            attributes: {exclude: ['postId'],},
+            where: { postId },
+            order: [['createdAt', 'DESC']],
+        })
+        if (data.length) {
+            res.json({ data });
+        } else {
+            return res.status(400).json({ errorMessage: "존재하지 않는 게시글의 댓글입니다." });
+        }
+    } catch (err) {
+        res.json({ errorMessage: "댓글 목록 조회에 실패했습니다." });
+    }
+});
+
 module.exports = router;

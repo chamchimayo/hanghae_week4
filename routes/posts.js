@@ -48,4 +48,27 @@ router.get("/:postId", async (req, res) => {
     }
 });
 
+// 게시글 수정 API
+router.patch("/:postId", async (req, res) => {
+    // {  "title": "안녕하새요 수정된 게시글 입니다.",  "content": "안녕하세요 content 입니다."}
+    const { postId } = req.params;
+    const { title, content } = req.body;
+
+    try {
+        const post = await Posts.findByPk(postId);
+
+        if(post) {
+            await Posts.update(
+                { title, content },
+                {where: { postId }},
+            );
+            res.json({ "message": "게시글을 수정하였습니다." });
+        } else {
+            res.json({ errorMessage: "게시글이 존재하지 않습니다." });
+        }
+    } catch {
+        return res.status(400).json({ errorMessage: "게시글 수정에 실패했습니다" });
+    }
+});
+
 module.exports = router;

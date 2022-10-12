@@ -33,4 +33,19 @@ router.get("/", async (req, res) => {
     // }
 });
 
+// 게시글 상세 조회 API
+router.get("/:postId", async (req, res) => {
+    const { postId } = req.params;
+    try {  
+        const data = await Posts.findOne({where: { postId }});
+        
+        if (!data) {
+            return res.status(400).json({ errorMessage: "게시글이 존재하지 않습니다." });
+        }
+        res.json({ data });
+    } catch (err) {
+        res.status(400).json({ errorMessage: "게시글 조회에 실패했습니다." });
+    }
+});
+
 module.exports = router;

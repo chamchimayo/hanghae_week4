@@ -3,7 +3,6 @@ const router = express.Router();
 // const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 
-const { Op } = require("sequelize");
 const { Users } = require('../models');
 
 // 회원 가입 API
@@ -43,11 +42,17 @@ router.post("/login", async (req, res) =>{
         }
         
         res.send({
-            token: jwt.sign({ nickname: user.nickname}, "tunamayo-secret-key"),
+            token: jwt.sign({ userId: user.userId}, "my-secret-key"),
         });
     } catch(e) {
         res.status(400).json({ errorMessage: "로그인에 실패했습니다." });
     }
+});
+
+const authMiddleware = require("../middlewares/auth-middleware");
+
+router.get("/users/me", authMiddleware, async (req, res) => {
+res.send({ user: res.locals.user });
 });
 
 module.exports = router;

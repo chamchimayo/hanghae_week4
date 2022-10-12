@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const authMiddleware = require('../middlewares/auth-middleware');
 
 const { Posts } = require('../models');
+const { Likes } = require('../models')
 
 // 게시글 작성 API
 router.post("/", authMiddleware, async (req, res) => {
@@ -85,6 +86,26 @@ router.delete("/:postId", authMiddleware, async (req, res) => {
         }
     } catch (err) {
         res.json({ errorMessage: "게시글 삭제에 실패했습니다."});
+    }
+});
+
+// 게시글 좋아요 API
+router.put('/:postId/like', authMiddleware, async (req, res) => {
+    const { postId } = req.params;
+    const { userId } = res.locals.user;
+
+    try {
+        const currentLike = await Likes.findOne({where: [{postId}, {userId}]})
+    
+        if(!currentLike) {
+            await Likes.create({postId, userId});
+            res.status(200).json({ "message": "게시글의 좋아요를 등록하였습니다." });
+        } else {
+            await Likes.destroy({where: [{postId}, {userId}]});
+            res.status(200).json({ "message": "게시글의 좋아요를 취소하였습니다." });
+        }
+    } catch (err) {
+        res.status(400).json({ errorMessage: "좋아요 실패!" });
     }
 });
 

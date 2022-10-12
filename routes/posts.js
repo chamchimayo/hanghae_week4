@@ -49,8 +49,8 @@ router.get("/:postId", async (req, res) => {
 });
 
 // 게시글 수정 API
-router.patch("/:postId", async (req, res) => {
-    // {  "title": "안녕하새요 수정된 게시글 입니다.",  "content": "안녕하세요 content 입니다."}
+router.patch("/:postId", authMiddleware, async (req, res) => {
+
     const { postId } = req.params;
     const { title, content } = req.body;
 
@@ -68,6 +68,23 @@ router.patch("/:postId", async (req, res) => {
         }
     } catch {
         return res.status(400).json({ errorMessage: "게시글 수정에 실패했습니다" });
+    }
+});
+
+// 게시글 삭제 API
+router.delete("/:postId", authMiddleware, async (req, res) => {
+    const { postId } = req.params;
+
+    const post = await Posts.findByPk(postId);
+    try {
+        if(post) {
+            await Posts.destroy({ where: { postId } });
+            res.json({ "message": "게시글을 삭제하였습니다." });
+        } else {
+            res.json({ errorMessage: "게시글 존재하지 않습니다." });
+        }
+    } catch (err) {
+        res.json({ errorMessage: "게시글 삭제에 실패했습니다."});
     }
 });
 

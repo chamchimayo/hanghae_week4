@@ -42,4 +42,26 @@ router.get("/:postId", async (req, res) => {
     }
 });
 
+// 댓글 수정 API
+router.patch('/:commentId', authMiddleware, async (req, res) => {
+    const { commentId } = req.params;
+    const { comment } = req.body;
+
+    try {
+        const currentComment = await Comments.findByPk(commentId);
+
+        if (currentComment) {
+            await Comments.update(
+                { comment: comment },
+                { where: { commentId } }
+            );
+            res.status(200).json({ "message": "댓글을 수정하였습니다." });
+        } else {
+            res.status(400).json({ errorMessage: "댓글이 존재하지 않습니다." })
+        }
+    } catch (err) {
+        res.status(400).json({ errorMessage: "댓글 수정에 실패했습니다." });
+    }
+});
+
 module.exports = router;

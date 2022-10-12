@@ -62,7 +62,7 @@ router.patch("/:postId", authMiddleware, async (req, res) => {
                 { title, content },
                 {where: { postId }},
             );
-            res.status(400).json({ "message": "게시글을 수정하였습니다." });
+            res.status(200).json({ "message": "게시글을 수정하였습니다." });
         } else {
             res.status(400).json({ errorMessage: "게시글이 존재하지 않습니다." });
         }
@@ -79,7 +79,7 @@ router.delete("/:postId", authMiddleware, async (req, res) => {
     try {
         if(post) {
             await Posts.destroy({ where: { postId } });
-            res.status(400).json({ "message": "게시글을 삭제하였습니다." });
+            res.status(200).json({ "message": "게시글을 삭제하였습니다." });
         } else {
             res.status(400).json({ errorMessage: "게시글 존재하지 않습니다." });
         }

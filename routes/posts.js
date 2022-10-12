@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+const authMiddleware = require('../middlewares/auth-middleware');
 
 const { Posts } = require('../models');
-const authMiddleware = require('../middlewares/auth-middleware');
 
 // 게시글 작성 API
 router.post("/", authMiddleware, async (req, res) => {
